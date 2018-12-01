@@ -1,0 +1,18 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    json (2.1.0)
+    redis (4.0.3)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  json
+  redis
+
+RUBY VERSION
+   ruby 2.2.2p95
+
+BUNDLED WITH
+   1.17.1
