@@ -2,7 +2,7 @@ require 'redis'
 require 'json'
 
 unless ARGV.length == 2
-  p "Usage: #{$0} username topic"
+  puts "Usage: #{$0} username topic"
   exit 1
 end
 
@@ -11,10 +11,12 @@ topic = ARGV[1]
 
 Thread.new do
   Redis.new.subscribe(topic) do |on|
-    p "Joined ##{topic}"
+    puts "Joined ##{topic}"
     on.message do |channel, msg|
       data = JSON.parse(msg)
-      puts "[#{data['user']}]: #{data['msg']}"
+      unless username == data['user']
+        puts "[#{data['user']}]: #{data['msg']}    (#{Time.at(data['time'])})"
+      end
     end
   end
 end
@@ -23,5 +25,7 @@ $redis = Redis.new
 
 loop do
   msg = STDIN.gets
-  $redis.publish topic, {user: username, msg: msg}.to_json
+  time = Time.now.to_i
+  $redis.publish topic, {user: username, msg: msg, time: time}.to_json
+  puts "    (#{Time.at(time)})"
 end
