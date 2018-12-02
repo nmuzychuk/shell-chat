@@ -13,7 +13,7 @@ $sub = Redis.new
 Thread.new do
   $sub.subscribe(topic) do |on|
     puts "Joined ##{topic}"
-    on.message do |channel, msg|
+    on.message do |_channel, msg|
       data = JSON.parse(msg)
       unless username == data['user']
         puts "[#{data['user']}]: #{data['msg']}    (#{Time.at(data['time'])})"
