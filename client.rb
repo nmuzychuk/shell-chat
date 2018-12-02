@@ -9,8 +9,9 @@ end
 username = ARGV[0]
 topic = ARGV[1]
 
+$sub = Redis.new
 Thread.new do
-  Redis.new.subscribe(topic) do |on|
+  $sub.subscribe(topic) do |on|
     puts "Joined ##{topic}"
     on.message do |channel, msg|
       data = JSON.parse(msg)
@@ -22,6 +23,13 @@ Thread.new do
 end
 
 $redis = Redis.new
+
+Signal.trap("SIGINT") do
+  puts "\nQuitting..."
+  $sub.close
+  $redis.close
+  exit
+end
 
 loop do
   msg = STDIN.gets
