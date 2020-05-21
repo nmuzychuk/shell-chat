@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     json (2.3.0)
-    redis (4.1.1)
+    redis (4.1.4)
 
 PLATFORMS
   ruby
